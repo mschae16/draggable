@@ -1,0 +1,85 @@
+{
+    "parser": "babel-eslint",
+    "parserOptions": {
+        "ecmaVersion": 8,
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "jsx": true,
+            "experimentalObjectRestSpread": true
+        }
+    },
+    "env": {
+        "browser": true,
+        "jest": true
+    },
+    "plugins": [
+        "react",
+        "jsx-a11y",
+        "import",
+        "prettier",
+        "react-hooks"
+    ],
+    "extends": [
+        "airbnb",
+        "prettier/react",
+        "standard-react",
+        "eslint:recommended",
+        "plugin:react/recommended"
+    ],
+    "rules": {
+        "semi": 0,
+        "indent": "off",
+        "comma-dangle": "off",
+        "arrow-parens": "off",
+        "no-undef": 2,
+        "no-unused-vars": 1,
+        "no-class-assign": 0,
+        "no-case-declarations": 0,
+        "no-console": "warn",
+        "no-debugger": "warn",
+        "no-fallthrough": "warn",
+        "import/prefer-default-export": 0,
+        "import/no-extraneous-dependencies": "warn",
+        "space-before-function-paren": 0,
+        "max-len": [
+            2,
+            80,
+            4,
+            {
+                "ignoreUrls": true,
+                "ignorePattern": "import|await"
+            }
+        ],
+        "radix": "off",
+        "react/no-find-dom-node": "off",
+        "react/jsx-no-bind": 0,
+        "react/jsx-indent-props": "off",
+        "react/jsx-filename-extension": 0,
+        "react/sort-comp": 0,
+        "react/jsx-indent": "off",
+        "react/forbid-prop-types": 0,
+        "react/prop-types": 0,
+        "react/prefer-stateless-function": "warn",
+        "react/no-string-refs": 1,
+        "react/jsx-boolean-value": 0,
+        "react/jsx-wrap-multilines": 0,
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": 1,
+        "prettier/prettier": [
+            "error",
+            {
+                "singleQuote": true
+            }
+        ],
+        "jsx-a11y/no-static-element-interactions": "warn",
+        "jsx-a11y/click-events-have-key-events": "warn",
+        "jsx-a11y/mouse-events-have-key-events": "warn",
+        "jsx-a11y/label-has-for": "warn",
+        "jsx-a11y/no-noninteractive-element-interactions": "warn",
+        "jsx-quotes": [
+            "error",
+            "prefer-double"
+        ],
+        "object-curly-spacing": ""
+    }
+}
