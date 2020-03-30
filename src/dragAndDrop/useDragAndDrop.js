@@ -1,6 +1,23 @@
 // @flow
 import { useState, useReducer } from 'react';
 
+type DefaultState = {
+    pastActions: Array<any>,
+    presentAction: {} | null,
+    futureActions: Array<any>,
+};
+
+type Event = {
+    type: string,
+    item: {
+        dataset: {
+            id: number,
+        },
+    },
+    oldIndex: number,
+    newIndex: number,
+};
+
 const ACTION_TYPES = {
     ADD: 'add',
     REMOVE: 'remove',
@@ -25,7 +42,7 @@ const ACTIONS = {
     DRAG_AND_DROP: 'drag-and-drop',
 };
 
-const defaultState = {
+const defaultState: DefaultState = {
     pastActions: [],
     presentAction: null,
     futureActions: [],
@@ -36,7 +53,6 @@ const historyReducer = (state = defaultState, action) => {
 
     switch (action.type) {
         case ACTIONS.UNDO:
-            const pastAction = pastActions[pastActions.length - 1];
             const newPastActions = pastActions.slice(0, pastActions.length - 1);
 
             return {
@@ -174,7 +190,7 @@ export default function useDragAndDrop() {
         });
     };
 
-    const handleAction = (event) => {
+    const handleAction = (event: Event) => {
         const currentAction = {
             actionType: event.type,
             itemId: parseInt(event.item.dataset.id, 10),
@@ -188,7 +204,7 @@ export default function useDragAndDrop() {
         });
     };
 
-    console.log({ unselectedList, selectedList, history });
+    // console.log({ unselectedList, selectedList, history });
 
     return {
         unselectedList,
