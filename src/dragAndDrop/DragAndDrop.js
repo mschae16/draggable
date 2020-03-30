@@ -21,43 +21,7 @@ export default function DragAndDrop() {
     } = useDragAndDrop();
 
     return (
-        <Container maxWidth="lg">
-            <div className="drag-and-drop">
-                <ReactSortable
-                    id="unselected"
-                    sort={false}
-                    onAdd={(event) => handleAction(event)}
-                    onRemove={(event) => handleAction(event)}
-                    animation={300}
-                    easing="cubic-bezier(1, 0, 0, 1)"
-                    group="group"
-                    className="unordered-list"
-                    list={unselectedList}
-                    setList={setUnselectedList}
-                >
-                    {unselectedList.map((item) => (
-                        <div className="item" key={item.id}>
-                            {item.name}
-                        </div>
-                    ))}
-                </ReactSortable>
-                <ReactSortable
-                    id="selected"
-                    sort={false}
-                    animation={300}
-                    easing="cubic-bezier(1, 0, 0, 1)"
-                    group="group"
-                    className="unordered-list"
-                    list={selectedList}
-                    setList={setSelectedList}
-                >
-                    {selectedList.map((item) => (
-                        <div className="item" key={item.id}>
-                            {item.name}
-                        </div>
-                    ))}
-                </ReactSortable>
-            </div>
+        <main className="main">
             <div className="actions">
                 <div className="primary">
                     <PrimaryButton
@@ -74,6 +38,54 @@ export default function DragAndDrop() {
                     Redo
                 </SecondaryButton>
             </div>
-        </Container>
+            <div className="drag-and-drop">
+                <ReactSortable
+                    id="unselected"
+                    sort={false}
+                    onAdd={(event) => handleAction(event)}
+                    onRemove={(event) => handleAction(event)}
+                    animation={150}
+                    easing="cubic-bezier(1, 0, 0, 1)"
+                    group="group"
+                    className="unordered-list"
+                    list={unselectedList}
+                    setList={setUnselectedList}
+                >
+                    {unselectedList.map((item, index) => (
+                        <div
+                            style={{
+                                backgroundColor: `hsl(${index * 23}, 85%, 46%)`,
+                            }}
+                            className="item"
+                            key={item.id}
+                        >
+                            {item.name}
+                        </div>
+                    ))}
+                </ReactSortable>
+                <ReactSortable
+                    id="selected"
+                    sort={false}
+                    animation={150}
+                    easing="cubic-bezier(1, 0, 0, 1)"
+                    group="group"
+                    className="unordered-list"
+                    list={selectedList}
+                    setList={setSelectedList}
+                >
+                    {selectedList.map((item, index) => (
+                        <div
+                            style={{
+                                backgroundColor: `hsl(${index * 23}, 85%, 46%)`,
+                            }}
+                            className="item"
+                            key={item.id}
+                        >
+                            {item.name}
+                        </div>
+                    ))}
+                </ReactSortable>
+            </div>
+        </main>
     );
 }
