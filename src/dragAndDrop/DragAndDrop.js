@@ -16,8 +16,11 @@ export default function DragAndDrop() {
         undo,
         redo,
         pastActions,
+        presentAction,
         futureActions,
     } = useDragAndDrop();
+
+    // console.log({ pastActions, presentAction, futureActions });
 
     return (
         <main className="main">
