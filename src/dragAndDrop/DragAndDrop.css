@@ -1,0 +1,41 @@
+.drag-and-drop {
+    padding: 16px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.unordered-list {
+    padding: 16px;
+    height: 500px;
+    width: 250px;
+    border: 1px solid black;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    list-style-type: none;
+    align-items: center;
+}
+
+.item {
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 180px;
+    height: 100px;
+    background-color: lightblue;
+    border: 1px solid teal;
+    border-radius: 8px;
+    font-size: 18px;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+}
+
+.primary {
+    margin-right: 12px;
+}
