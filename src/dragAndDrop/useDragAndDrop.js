@@ -23,7 +23,6 @@ const ACTIONS = {
     UNDO: 'undo',
     REDO: 'redo',
     DRAG_AND_DROP: 'drag-and-drop',
-    RESET: 'reset',
 };
 
 const defaultState = {
@@ -59,8 +58,6 @@ const historyReducer = (state = defaultState, action) => {
                 presentAction: action.currentAction,
                 futureActions: [],
             };
-        case ACTIONS.RESET:
-            return defaultState;
         default:
             return state;
     }

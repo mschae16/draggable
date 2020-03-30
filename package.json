@@ -57,6 +57,7 @@
         "eslint-plugin-prettier": "^2.7.0",
         "eslint-plugin-react": "^7.19.0",
         "eslint-plugin-react-hooks": "^2.5.0",
-        "prettier": "2.0.2"
+        "prettier": "2.0.2",
+        "react-test-renderer": "^16.13.1"
     }
 }

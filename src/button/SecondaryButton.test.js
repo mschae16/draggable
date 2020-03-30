@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import { render, getAllByRole } from '@testing-library/react';
 import SecondaryButton from './SecondaryButton';
