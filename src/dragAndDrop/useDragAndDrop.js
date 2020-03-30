@@ -1,7 +1,29 @@
 // @flow
 import { useState, useReducer } from 'react';
 
-const ACTION_TYPES = {
+type DefaultState = {
+    pastActions: Array<any>,
+    presentAction: {} | null,
+    futureActions: Array<any>,
+};
+
+type Action = {
+    type: string,
+    currentAction: any,
+};
+
+type Event = {
+    type: string,
+    item: {
+        dataset: {
+            id: number,
+        },
+    },
+    oldIndex: number,
+    newIndex: number,
+};
+
+export const ACTION_TYPES = {
     ADD: 'add',
     REMOVE: 'remove',
 };
@@ -31,12 +53,11 @@ const defaultState = {
     futureActions: [],
 };
 
-const historyReducer = (state = defaultState, action) => {
+const historyReducer = (state: DefaultState = defaultState, action: Action) => {
     const { pastActions, futureActions } = state;
 
     switch (action.type) {
         case ACTIONS.UNDO:
-            const pastAction = pastActions[pastActions.length - 1];
             const newPastActions = pastActions.slice(0, pastActions.length - 1);
 
             return {
@@ -68,7 +89,7 @@ export default function useDragAndDrop() {
     const [selectedList, setSelectedList] = useState([]);
 
     const [history, historyDispatch] = useReducer(historyReducer, defaultState);
-    const { pastActions, futureActions } = history;
+    const { pastActions, presentAction, futureActions } = history;
 
     const retrieveItemById = (id, list) => {
         return list.find((element) => element.id === id);
@@ -86,14 +107,11 @@ export default function useDragAndDrop() {
         return setList(newList);
     };
 
-    const undo = () => {
-        if (pastActions.length === 0) return;
-
-        const lastAction = pastActions[pastActions.length - 1];
-        const { actionType, itemId, previousIndex, newIndex } = lastAction;
+    const updateBothListsByAction = (action) => {
+        const { actionType, itemId, previousIndex, newIndex } = action;
 
         const currentAction = {
-            ...lastAction,
+            ...action,
             previousIndex: newIndex,
             newIndex: previousIndex,
         };
@@ -123,6 +141,15 @@ export default function useDragAndDrop() {
             updateList(selectedList, setSelectedList, previousIndex, 0, item);
             updateList(unselectedList, setUnselectedList, newIndex, 1);
         }
+
+        return currentAction;
+    };
+
+    const undo = () => {
+        if (pastActions.length === 0) return;
+
+        const lastAction = pastActions[pastActions.length - 1];
+        const currentAction = updateBothListsByAction(lastAction);
 
         historyDispatch({
             type: ACTIONS.UNDO,
@@ -134,39 +161,7 @@ export default function useDragAndDrop() {
         if (futureActions.length === 0) return;
 
         const futureAction = futureActions[0];
-        const { actionType, itemId, previousIndex, newIndex } = futureAction;
-
-        const currentAction = {
-            ...futureAction,
-            previousIndex: newIndex,
-            newIndex: previousIndex,
-        };
-
-        if (actionType === ACTION_TYPES.REMOVE) {
-            currentAction.actionType = ACTION_TYPES.ADD;
-            const item = retrieveItemById(itemId, selectedList);
-
-            if (!item) return;
-
-            updateList(
-                unselectedList,
-                setUnselectedList,
-                previousIndex,
-                0,
-                item
-            );
-            updateList(selectedList, setSelectedList, newIndex, 1);
-        }
-
-        if (actionType === ACTION_TYPES.ADD) {
-            currentAction.actionType = ACTION_TYPES.REMOVE;
-            const item = retrieveItemById(itemId, unselectedList);
-
-            if (!item) return;
-
-            updateList(selectedList, setSelectedList, previousIndex, 0, item);
-            updateList(unselectedList, setUnselectedList, newIndex, 1);
-        }
+        const currentAction = updateBothListsByAction(futureAction);
 
         historyDispatch({
             type: ACTIONS.REDO,
@@ -174,7 +169,7 @@ export default function useDragAndDrop() {
         });
     };
 
-    const handleAction = (event) => {
+    const handleAction = (event: Event) => {
         const currentAction = {
             actionType: event.type,
             itemId: parseInt(event.item.dataset.id, 10),
@@ -188,8 +183,6 @@ export default function useDragAndDrop() {
         });
     };
 
-    console.log({ unselectedList, selectedList, history });
-
     return {
         unselectedList,
         setUnselectedList,
@@ -199,6 +192,7 @@ export default function useDragAndDrop() {
         undo,
         redo,
         pastActions,
+        presentAction,
         futureActions,
     };
 }
