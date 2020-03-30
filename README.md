@@ -2,6 +2,8 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and implements the SortableJS library to enable drag-and-drop capabilities. Additionally, it tracks user actions on add/remove of items from one list to the second, enabling the user to undo and redo past actions.
 
+To use, clone the repo, run `npm install` and then `npm start`
+
 ## Available Scripts
 
 In the project directory, you can run:
