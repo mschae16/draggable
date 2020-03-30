@@ -7,6 +7,11 @@ type DefaultState = {
     futureActions: Array<any>,
 };
 
+type Action = {
+    type: string,
+    currentAction: any,
+};
+
 type Event = {
     type: string,
     item: {
@@ -42,13 +47,13 @@ const ACTIONS = {
     DRAG_AND_DROP: 'drag-and-drop',
 };
 
-const defaultState: DefaultState = {
+const defaultState = {
     pastActions: [],
     presentAction: null,
     futureActions: [],
 };
 
-const historyReducer = (state = defaultState, action) => {
+const historyReducer = (state: DefaultState = defaultState, action: Action) => {
     const { pastActions, futureActions } = state;
 
     switch (action.type) {
@@ -102,14 +107,11 @@ export default function useDragAndDrop() {
         return setList(newList);
     };
 
-    const undo = () => {
-        if (pastActions.length === 0) return;
-
-        const lastAction = pastActions[pastActions.length - 1];
-        const { actionType, itemId, previousIndex, newIndex } = lastAction;
+    const updateBothListsByAction = (action) => {
+        const { actionType, itemId, previousIndex, newIndex } = action;
 
         const currentAction = {
-            ...lastAction,
+            ...action,
             previousIndex: newIndex,
             newIndex: previousIndex,
         };
@@ -139,6 +141,15 @@ export default function useDragAndDrop() {
             updateList(selectedList, setSelectedList, previousIndex, 0, item);
             updateList(unselectedList, setUnselectedList, newIndex, 1);
         }
+
+        return currentAction;
+    };
+
+    const undo = () => {
+        if (pastActions.length === 0) return;
+
+        const lastAction = pastActions[pastActions.length - 1];
+        const currentAction = updateBothListsByAction(lastAction);
 
         historyDispatch({
             type: ACTIONS.UNDO,
@@ -150,39 +161,7 @@ export default function useDragAndDrop() {
         if (futureActions.length === 0) return;
 
         const futureAction = futureActions[0];
-        const { actionType, itemId, previousIndex, newIndex } = futureAction;
-
-        const currentAction = {
-            ...futureAction,
-            previousIndex: newIndex,
-            newIndex: previousIndex,
-        };
-
-        if (actionType === ACTION_TYPES.REMOVE) {
-            currentAction.actionType = ACTION_TYPES.ADD;
-            const item = retrieveItemById(itemId, selectedList);
-
-            if (!item) return;
-
-            updateList(
-                unselectedList,
-                setUnselectedList,
-                previousIndex,
-                0,
-                item
-            );
-            updateList(selectedList, setSelectedList, newIndex, 1);
-        }
-
-        if (actionType === ACTION_TYPES.ADD) {
-            currentAction.actionType = ACTION_TYPES.REMOVE;
-            const item = retrieveItemById(itemId, unselectedList);
-
-            if (!item) return;
-
-            updateList(selectedList, setSelectedList, previousIndex, 0, item);
-            updateList(unselectedList, setUnselectedList, newIndex, 1);
-        }
+        const currentAction = updateBothListsByAction(futureAction);
 
         historyDispatch({
             type: ACTIONS.REDO,
@@ -203,8 +182,6 @@ export default function useDragAndDrop() {
             currentAction,
         });
     };
-
-    // console.log({ unselectedList, selectedList, history });
 
     return {
         unselectedList,
