@@ -18,7 +18,7 @@ type Event = {
     newIndex: number,
 };
 
-const ACTION_TYPES = {
+export const ACTION_TYPES = {
     ADD: 'add',
     REMOVE: 'remove',
 };
@@ -84,7 +84,7 @@ export default function useDragAndDrop() {
     const [selectedList, setSelectedList] = useState([]);
 
     const [history, historyDispatch] = useReducer(historyReducer, defaultState);
-    const { pastActions, futureActions } = history;
+    const { pastActions, presentAction, futureActions } = history;
 
     const retrieveItemById = (id, list) => {
         return list.find((element) => element.id === id);
@@ -215,6 +215,7 @@ export default function useDragAndDrop() {
         undo,
         redo,
         pastActions,
+        presentAction,
         futureActions,
     };
 }

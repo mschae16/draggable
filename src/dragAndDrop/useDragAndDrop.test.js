@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { renderHook, act } from '@testing-library/react-hooks';
-import useDragAndDrop from './useDragAndDrop';
+import useDragAndDrop, { ACTION_TYPES } from './useDragAndDrop';
 
 describe('useDragAndDrop hook', () => {
     test('initial state', () => {
@@ -41,5 +41,41 @@ describe('useDragAndDrop hook', () => {
         expect(typeof redo).toBe('function');
         expect(pastActions.length).toEqual(0);
         expect(futureActions.length).toEqual(0);
+    });
+
+    test('handle action', () => {
+        const { result } = renderHook(() => useDragAndDrop());
+
+        const { handleAction, pastActions, futureActions } = result.current;
+
+        expect(typeof handleAction).toBe('function');
+        expect(pastActions.length).toEqual(0);
+        expect(futureActions.length).toEqual(0);
+
+        const action = {
+            type: ACTION_TYPES.REMOVE,
+            item: {
+                dataset: {
+                    id: 1,
+                },
+            },
+            oldIndex: 0,
+            newIndex: 0,
+        };
+
+        const expectedAction = {
+            actionType: ACTION_TYPES.REMOVE,
+            itemId: action.item.dataset.id,
+            previousIndex: action.oldIndex,
+            newIndex: action.newIndex,
+        };
+
+        act(() => {
+            handleAction(action);
+        });
+
+        expect(result.current.pastActions.length).toBe(1);
+        expect(result.current.futureActions.length).toBe(0);
+        expect(result.current.presentAction).toEqual(expectedAction);
     });
 });
