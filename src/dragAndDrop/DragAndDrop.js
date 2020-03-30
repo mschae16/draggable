@@ -1,11 +1,10 @@
 // @flow
 import React from 'react';
 import { ReactSortable } from 'react-sortablejs';
-import { Container } from '@material-ui/core';
-import './DragAndDrop.css';
 import PrimaryButton from '../button/PrimaryButton';
 import SecondaryButton from '../button/SecondaryButton';
 import useDragAndDrop from './useDragAndDrop';
+import './DragAndDrop.css';
 
 export default function DragAndDrop() {
     const {
